@@ -9,24 +9,40 @@ import SwiftUI
 
 struct ContentView: View {
     let starterCars = StarterCars()
-    @State private var selectedCar: Int = 0
+    @State private var selectedCar: Int = 0 {
+        didSet {
+            if selectedCar >= starterCars.cars.count {
+                selectedCar = 0
+            }
+        }
+    }
+    @State private var exhaustPackage = false
+    @State private var tiresPackage = false
     
     let car = Car(make: "Mazda", model: "MX-5", topSpeed: 125, acceleration: 7.7, handling:5)
     
     
     
     var body: some View {
+        let exhaustPackageBinding = Binding<Bool> (
+            get: { self.exhaustPackage },
+            set: {newValue in
+                self.exhaustPackage = newValue
+                
+            }
+        )
+        
         VStack {
             Image(systemName: "globe")
                 .imageScale(.large)
                 .foregroundColor(.accentColor)
             
             Text("\(starterCars.cars[selectedCar].displayStats())")
-            Button("Random car", action: {
-                selectedCar = Int.random(in: 0 ..<
-                    self.starterCars.cars.count)
+            Button("Next Car", action: {
+                selectedCar += 1
             })
-          
+            Toggle("Exhaust Package", isOn: $exhaustPackage)
+            Toggle("Tires Package", isOn: $tiresPackage)
         
         }
         .padding()
