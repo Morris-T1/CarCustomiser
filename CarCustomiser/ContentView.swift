@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct ContentView: View {
-    let starterCars = StarterCars()
+    @State private var starterCars = StarterCars()
     @State private var selectedCar: Int = 0 {
         didSet {
             if selectedCar >= starterCars.cars.count {
@@ -18,19 +18,65 @@ struct ContentView: View {
     }
     @State private var exhaustPackage = false
     @State private var tiresPackage = false
-    
-    let car = Car(make: "Mazda", model: "MX-5", topSpeed: 125, acceleration: 7.7, handling:5)
-    
-    
-    
+    @State private var turboPackage = false
+    @State private var enginePackage = false
+
+
     var body: some View {
         let exhaustPackageBinding = Binding<Bool> (
             get: { self.exhaustPackage },
-            set: {newValue in
+            set: { newValue in
                 self.exhaustPackage = newValue
-                
+                if newValue == true {
+                    starterCars.cars[selectedCar].topSpeed += 5
+                } else {
+                    starterCars.cars[selectedCar].topSpeed -= 5
+                }
             }
         )
+        
+    
+        let tiresPackageBinding = Binding<Bool> (
+            get: { self.tiresPackage },
+            set: { newValue in
+                self.tiresPackage = newValue
+                if newValue == true {
+                    starterCars.cars[selectedCar].handling += 2
+                } else {
+                    starterCars.cars[selectedCar].handling -= 2
+                }
+            }
+        )
+        
+        let turboPackageBinding = Binding<Bool> (
+            get: { self.turboPackage },
+            set: { newValue in
+                self.turboPackage = newValue
+                if newValue == true {
+                    starterCars.cars[selectedCar].acceleration += 1.1
+                } else {
+                    starterCars.cars[selectedCar].acceleration -= 1.1
+                }
+            }
+        )
+        
+        let enginePackageBinding = Binding<Bool> (
+            get: { self.enginePackage },
+            set: { newValue in
+                self.enginePackage = newValue
+                if newValue == true {
+                    starterCars.cars[selectedCar].acceleration += 0.6
+                    starterCars.cars[selectedCar].topSpeed += 10
+                } else {
+                    starterCars.cars[selectedCar].acceleration -= 0.6
+                    starterCars.cars[selectedCar].topSpeed -= 10
+                }
+            }
+        )
+        
+        
+        
+        
         
         VStack {
             Image(systemName: "globe")
@@ -41,8 +87,11 @@ struct ContentView: View {
             Button("Next Car", action: {
                 selectedCar += 1
             })
-            Toggle("Exhaust Package", isOn: $exhaustPackage)
-            Toggle("Tires Package", isOn: $tiresPackage)
+       
+            Toggle("Exhaust Package", isOn: exhaustPackageBinding)
+            Toggle("Tires Package", isOn: tiresPackageBinding)
+            Toggle("Turbo Package", isOn: turboPackageBinding)
+            Toggle("Engine Package", isOn: enginePackageBinding)
         
         }
         .padding()
