@@ -15,16 +15,16 @@ struct Car {
     var acceleration: Double
     var handling: Int
     
-    func displayStats(Car) {
+    func displayStats() -> String {
         
-        let output = """
-                    ("Car Make": \(make)
-                    ("Car Model": \(model)
-                    ("Car topSpeed": \(topSpeed)
-                    ("Car acceleration": \(acceleration)
-                    ("Car Handling": \(handling)
-                    """
+        return """
+            Make: \(make)
+            Model: \(model)
+            Top Speed: \(topSpeed)
+            Acceleration: \(acceleration)
+            Handling: \(handling)
+            """
         
-        return output
+        
     }
 }
