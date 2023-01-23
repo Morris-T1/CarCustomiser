@@ -20,6 +20,8 @@ struct ContentView: View {
     @State private var tiresPackage = false
     @State private var turboPackage = false
     @State private var enginePackage = false
+    @State private var remainingFunds = 1000
+
 
 
     var body: some View {
@@ -29,8 +31,10 @@ struct ContentView: View {
                 self.exhaustPackage = newValue
                 if newValue == true {
                     starterCars.cars[selectedCar].topSpeed += 5
+                    remainingFunds -= 500
                 } else {
                     starterCars.cars[selectedCar].topSpeed -= 5
+                    remainingFunds += 500
                 }
             }
         )
@@ -42,8 +46,10 @@ struct ContentView: View {
                 self.tiresPackage = newValue
                 if newValue == true {
                     starterCars.cars[selectedCar].handling += 2
+                    remainingFunds -= 500
                 } else {
                     starterCars.cars[selectedCar].handling -= 2
+                    remainingFunds += 500
                 }
             }
         )
@@ -54,8 +60,10 @@ struct ContentView: View {
                 self.turboPackage = newValue
                 if newValue == true {
                     starterCars.cars[selectedCar].acceleration += 1.1
+                    remainingFunds -= 500
                 } else {
                     starterCars.cars[selectedCar].acceleration -= 1.1
+                    remainingFunds += 500
                 }
             }
         )
@@ -67,34 +75,51 @@ struct ContentView: View {
                 if newValue == true {
                     starterCars.cars[selectedCar].acceleration += 0.6
                     starterCars.cars[selectedCar].topSpeed += 10
+                    remainingFunds -= 1000
                 } else {
                     starterCars.cars[selectedCar].acceleration -= 0.6
                     starterCars.cars[selectedCar].topSpeed -= 10
+                    remainingFunds += 500
                 }
             }
         )
         
         
         
-        
-        
         VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundColor(.accentColor)
+            Form {
+                VStack {
+                    Image(systemName: "globe")
+                        .imageScale(.large)
+                        .foregroundColor(.accentColor)
+                    
+                    Text("\(starterCars.cars[selectedCar].displayStats())")
+                    Button("Next Car", action: {
+                        selectedCar += 1
+                        resetDisplay()
+                    })
+                    
+                    Toggle("Exhaust Package (Cost: 500)", isOn: exhaustPackageBinding)
+                    Toggle("Tires Package (Cost: 500)", isOn: tiresPackageBinding)
+                    Toggle("Turbo Package (Cost: 500)", isOn: turboPackageBinding)
+                    Toggle("Engine Package (Cost: 1000)", isOn: enginePackageBinding)
+                    
+                }
+                .padding()
             
-            Text("\(starterCars.cars[selectedCar].displayStats())")
-            Button("Next Car", action: {
-                selectedCar += 1
-            })
-       
-            Toggle("Exhaust Package", isOn: exhaustPackageBinding)
-            Toggle("Tires Package", isOn: tiresPackageBinding)
-            Toggle("Turbo Package", isOn: turboPackageBinding)
-            Toggle("Engine Package", isOn: enginePackageBinding)
-        
+            }
+            Text("remaining Funds: \(remainingFunds)")
+                .foregroundColor(.red)
         }
-        .padding()
+    }
+    func resetDisplay() {
+        starterCars = StarterCars()
+        exhaustPackage = false
+        tiresPackage = false
+        turboPackage = false
+        enginePackage = false
+        remainingFunds = 1000
+        
     }
 }
 
