@@ -21,38 +21,23 @@ struct ContentView: View {
     @State private var turboPackage = false
     @State private var enginePackage = false
     @State private var remainingFunds = 1000
+    @State private var remainingTime = 30
     
     var exhaustPackageEnabled: Bool {
-        var check = false
-        if remainingFunds >= 500 {
-            check = true
-        }
-        return check
+        return exhaustPackage ? true : remainingFunds >= 500 ? true : false
     }
     var tiresPackageEnabled: Bool {
-        var check = false
-        if remainingFunds >= 500 {
-            check = true
-        }
-        return check
+        return tiresPackage ? true : remainingFunds >= 500 ? true : false
     }
     var turboPackageEnabled: Bool {
-        var check = false
-        if remainingFunds >= 500 {
-            check = true
-        }
-        return check
+        return turboPackage ? true : remainingFunds >= 500 ? true : false
     }
     var enginePackageEnabled: Bool {
-        var check = false
-        if remainingFunds >= 500 {
-            check = true
-        }
-        return check
+        return enginePackage ? true : remainingFunds >= 1000 ? true : false
     }
     
 
-
+    let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
 
 
     var body: some View {
@@ -118,6 +103,19 @@ struct ContentView: View {
         
         
         VStack {
+            Text("\(remainingTime)")
+                .onReceive(timer) { _ in
+                    if self.remainingTime > 0 {
+                        self.remainingTime -= 1
+                        if self.remainingTime == 0 {
+                            exhaustPackageEnabled = false
+                            tiresPackageEnabled = false
+                            turboPackageEnabled = false
+                            enginePackageEnabled = false
+                        }
+                    }
+                }
+                .foregroundColor(.red)
             Form {
                 VStack {
                     Image(systemName: "globe")
