@@ -21,6 +21,37 @@ struct ContentView: View {
     @State private var turboPackage = false
     @State private var enginePackage = false
     @State private var remainingFunds = 1000
+    
+    var exhaustPackageEnabled: Bool {
+        var check = false
+        if remainingFunds >= 500 {
+            check = true
+        }
+        return check
+    }
+    var tiresPackageEnabled: Bool {
+        var check = false
+        if remainingFunds >= 500 {
+            check = true
+        }
+        return check
+    }
+    var turboPackageEnabled: Bool {
+        var check = false
+        if remainingFunds >= 500 {
+            check = true
+        }
+        return check
+    }
+    var enginePackageEnabled: Bool {
+        var check = false
+        if remainingFunds >= 500 {
+            check = true
+        }
+        return check
+    }
+    
+
 
 
 
@@ -79,7 +110,7 @@ struct ContentView: View {
                 } else {
                     starterCars.cars[selectedCar].acceleration -= 0.6
                     starterCars.cars[selectedCar].topSpeed -= 10
-                    remainingFunds += 500
+                    remainingFunds += 1000
                 }
             }
         )
@@ -100,9 +131,13 @@ struct ContentView: View {
                     })
                     
                     Toggle("Exhaust Package (Cost: 500)", isOn: exhaustPackageBinding)
+                        .disabled(!exhaustPackageEnabled)
                     Toggle("Tires Package (Cost: 500)", isOn: tiresPackageBinding)
+                        .disabled(!tiresPackageEnabled)
                     Toggle("Turbo Package (Cost: 500)", isOn: turboPackageBinding)
+                        .disabled(!turboPackageEnabled)
                     Toggle("Engine Package (Cost: 1000)", isOn: enginePackageBinding)
+                        .disabled(!enginePackageEnabled)
                     
                 }
                 .padding()
